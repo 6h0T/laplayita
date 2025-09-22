@@ -1,13 +1,13 @@
 {
-  "name": "parqueadero",
+  "name": "sistema-playas-estacionamiento-la-playita",
   "version": "1.0.0",
-  "description": "Sistema de gestión de parqueadero",
+  "description": "Sistema de gestión para playas de estacionamiento - La Playita",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js"
   },
-  "keywords": [],
+  "keywords": ["estacionamiento", "playas", "parking", "nodejs", "postgresql", "la-playita"],
   "author": "gh0tstudio.com",
   "license": "PROPRIETARY",
   "dependencies": {

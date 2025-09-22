@@ -7,19 +7,20 @@ const pool = require('./src/config/db');
 async function crearUsuarioEjemplo() {
     try {
         // 1. Crear empresa
-        const [empresa] = await pool.query(`
-            INSERT INTO empresas (nombre, numero_cliente, direccion, telefono, email, activa) 
-            VALUES (?, ?, ?, ?, ?, ?)
+        const empresaResult = await pool.query(`
+            INSERT INTO empresas (nombre, numero_cliente, direccion, telefono, email, plan, activa)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         `, [
             'Nicolas Maida',
-            '000000001',  // ← NÚMERO DE CLIENTE
+            '000000001',
             'Calle Falsa 123, Mendoza',
             '+54 261 1234567',
             'admin@laplayita.com',
+            'basico',
             true
         ]);
 
-        const idEmpresa = empresa.insertId;
+        const idEmpresa = empresaResult.insertId;
         console.log('✅ Empresa creada con ID:', idEmpresa);
 
         // 2. Encriptar contraseña
@@ -90,6 +91,7 @@ async function crearUsuarioEjemplo() {
         console.log('✅ Tarifas creadas');
 
         console.log('\n🎉 USUARIO CREADO EXITOSAMENTE!');
+        console.log('🏖️ SISTEMA DE PLAYAS DE ESTACIONAMIENTO "LA PLAYITA"');
         console.log('📋 DATOS DE LOGIN:');
         console.log('   Número de Cliente: 000000001');
         console.log('   Usuario: admin');

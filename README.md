@@ -1,46 +1,63 @@
-## Sistema de Parqueadero (Multi-empresa)
+# 🏖️ La Playita - Sistema de Gestión para Playas de Estacionamiento
 
-Aplicación Node.js + Express para gestionar parqueaderos con múltiples empresas, usuarios y operaciones de ingreso/salida de vehículos, tarifas, pagos, reportes y turnos de caja. Incluye una interfaz estática en `public/` servida por el mismo servidor.
+Sistema de gestión para playas de estacionamiento moderno y completo desarrollado con Node.js + Express y PostgreSQL. Diseñado especialmente para "La Playita" con una interfaz amigable y colores pastel.
 
-### Características
-- Autenticación por JWT con control de intentos de login por IP/usuario.
-- Multi-empresa: aislamiento por `id_empresa` en todas las operaciones.
-- Gestión de vehículos, movimientos (ingresos/salidas), tarifas (minuto/hora/día/mixto).
-- Pagos por movimiento con métodos: efectivo, tarjeta y QR.
-- Reportes (KPIs, series por día, por método, exportación a Excel), dashboard con estadísticos.
-- Turnos de caja: apertura/cierre, totales por método, diferencias, exportación.
-- Subida y servido de logo de empresa como BLOB (sin depender de disco).
+## ✨ Características
 
-### Requisitos
+- 🚗 **Gestión completa de vehículos** - Registro, edición y control de estado
+- 🔐 **Autenticación segura** - JWT con control de intentos fallidos
+- 💰 **Sistema de tarifas flexible** - Minuto, hora, día y mixto
+- 📊 **Dashboard interactivo** - Estadísticas en tiempo real
+- 🎫 **Tickets de salida** - Comprobantes automáticos con logo
+- 📈 **Reportes completos** - KPIs, exportación a Excel
+- 🎨 **Interfaz moderna** - Diseño pastel amigable con logo personalizado
+- 🔄 **Turnos de caja** - Control de apertura/cierre
+- 🏢 **Multi-empresa** - Soporte para múltiples playas de estacionamiento
+
+## 🛠️ Requisitos
+
 - Node.js 18+ y npm
-- MariaDB/MySQL 10.4+ (probado con MariaDB)
+- PostgreSQL 12+ (migrado desde MySQL/MariaDB)
 
-### Instalación
-1. Clonar el repositorio
-2. Instalar dependencias:
+## 🚀 Instalación
+
+1. **Clonar el repositorio**
+   ```bash
+   git clone https://github.com/TU_USUARIO/sistema-playas-estacionamiento-la-playita.git
+   cd sistema-playas-estacionamiento-la-playita
+   ```
+
+2. **Instalar dependencias**
    ```bash
    npm install
    ```
-3. Configurar variables de entorno creando un archivo `.env` en la raíz:
+
+3. **Configurar PostgreSQL**
+   - Crear base de datos `parqueadero`
+   - Ejecutar migración: `node migration_timezone_argentina.sql`
+
+4. **Configurar variables de entorno** (`.env`):
    ```env
-   # Puerto del servidor
    PORT=3000
-
-   # JWT
-   JWT_SECRET=tu_secreto_jwt
-
-   # Base de datos
+   JWT_SECRET=tu_secreto_jwt_super_seguro
+   
+   # PostgreSQL
    DB_HOST=localhost
-   DB_USER=root
-   DB_PASSWORD=
+   DB_USER=postgres
+   DB_PASSWORD=tu_password
    DB_NAME=parqueadero
+   DB_PORT=5432
    ```
-4. Crear la base de datos y datos iniciales ejecutando el script SQL:
-   - Abra su cliente de MariaDB/MySQL y ejecute el contenido de `schema.sql`.
-   - Esto creará la BD `parqueadero`, tablas, vistas, procedimiento y datos de ejemplo:
-     - Empresa: "Parqueadero Central" (id 1)
-     - Usuario admin: usuario `admin` con contraseña `admin123` (hash ya incluido)
-     - Tarifas base para carro/moto/bici
+
+5. **Crear usuario inicial**
+   ```bash
+   node crear_usuario_ejemplo.js
+   ```
+   
+   Esto creará:
+   - 🏢 Empresa: "La Playita"
+   - 👤 Usuario: `admin` / Contraseña: `admin123`
+   - 🔢 Número Cliente: `000000001`
 
 ### Ejecución
 - Desarrollo (con recarga si usa nodemon):
@@ -147,7 +164,50 @@ schema.sql             # Esquema, vistas, procedimiento y datos seed
 - `public/uploads/` (si existía en versiones previas) está ignorado; actualmente el logo se almacena como BLOB.
 - Asegúrese de configurar `JWT_SECRET` en producción.
 
-### Licencia
-Propietaria © gh0tstudio.com
+## 📸 Capturas de Pantalla
+
+### 🏖️ Página de Login
+- Logo circular del auto sonriente de "La Playita"
+- Colores pastel suaves y modernos
+- Interfaz amigable y responsive
+
+### 📊 Dashboard
+- Sidebar con gradiente azul pastel
+- Estadísticas en tiempo real
+- Logo circular en navegación
+
+### 🚗 Gestión de Vehículos
+- Estados: En parqueadero, Disponible, Desactivado
+- Filtros avanzados
+- Historial completo
+
+## 🎨 Diseño
+
+- **Paleta de colores**: Azul pastel (#7986cb, #5c6bc0)
+- **Logo**: Auto naranja sonriente en contenedor circular
+- **Tipografía**: Poppins (Google Fonts)
+- **Framework**: Bootstrap 5.3
+
+## 🤝 Contribuir
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.
+
+## 👨‍💻 Autor
+
+**Tu Nombre**
+- GitHub: [@tu-usuario](https://github.com/tu-usuario)
+- Email: tu-email@ejemplo.com
+
+---
+
+⭐ ¡Dale una estrella si te gusta este proyecto!
 
 

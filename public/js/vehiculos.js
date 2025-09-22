@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 render: function(data) {
                     switch(data) {
                         case 'activo':
-                            return '<span class="badge bg-success">En parqueadero</span>';
+                            return '<span class="badge bg-success">En playa de estacionamiento</span>';
                         case 'inactivo':
                             return '<span class="badge bg-secondary">Disponible</span>';
                         case 'desactivado':
