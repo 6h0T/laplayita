@@ -4,6 +4,16 @@ body {
     background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
 }
 
+/* Override Bootstrap primary colors with pastel */
+.text-primary {
+    color: #7986cb !important;
+}
+
+.bg-primary {
+    background-color: #7986cb !important;
+    border-color: #7986cb !important;
+}
+
 /* Estilos para el logo */
 .logo-container {
     display: flex;
@@ -126,6 +136,16 @@ body {
 .social-link:hover {
     color: #5c6bc0;
     transform: translateY(-3px);
+}
+
+/* Estilos para el enlace del footer */
+footer a {
+    color: #7986cb !important;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #5c6bc0 !important;
 }
 
 /* Animaciones */
