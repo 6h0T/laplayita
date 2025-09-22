@@ -31,22 +31,61 @@ async function verificarPropiedadVehiculo(req, res, next) {
 // Obtener todos los vehículos de la empresa
 router.get('/', verifyToken, async (req, res) => {
     try {
-        const [vehiculos] = await pool.query(
-            `SELECT v.*, 
-                    CASE 
-                        WHEN EXISTS (
-                            SELECT 1 
-                            FROM movimientos m 
-                            WHERE m.id_vehiculo = v.id_vehiculo 
-                            AND m.fecha_salida IS NULL
-                        ) THEN 'activo'
-                        ELSE 'inactivo'
-                    END as estado
-             FROM vehiculos v
-             WHERE v.id_empresa = ?
-             ORDER BY v.fecha_registro DESC`,
-            [req.user.id_empresa]
-        );
+        // Parámetro opcional para incluir vehículos inactivos
+        const incluirInactivos = req.query.incluir_inactivos === 'true';
+
+        // Verificar si la columna activo existe
+        let hasActivoColumn = true;
+        try {
+            await pool.query('SELECT activo FROM vehiculos LIMIT 1');
+        } catch (error) {
+            if (error.code === '42703') { // Column does not exist
+                hasActivoColumn = false;
+            }
+        }
+
+        let query, whereClause;
+        
+        if (hasActivoColumn) {
+            // Query con columna activo
+            whereClause = incluirInactivos 
+                ? 'WHERE v.id_empresa = ?' 
+                : 'WHERE v.id_empresa = ? AND v.activo = TRUE';
+                
+            query = `SELECT v.*, 
+                        CASE 
+                            WHEN NOT v.activo THEN 'desactivado'
+                            WHEN EXISTS (
+                                SELECT 1 
+                                FROM movimientos m 
+                                WHERE m.id_vehiculo = v.id_vehiculo 
+                                AND m.fecha_salida IS NULL
+                            ) THEN 'activo'
+                            ELSE 'inactivo'
+                        END as estado
+                 FROM vehiculos v
+                 ${whereClause}
+                 ORDER BY v.activo DESC, v.fecha_registro DESC`;
+        } else {
+            // Query sin columna activo (fallback)
+            whereClause = 'WHERE v.id_empresa = ?';
+            
+            query = `SELECT v.*, 
+                        CASE 
+                            WHEN EXISTS (
+                                SELECT 1 
+                                FROM movimientos m 
+                                WHERE m.id_vehiculo = v.id_vehiculo 
+                                AND m.fecha_salida IS NULL
+                            ) THEN 'activo'
+                            ELSE 'inactivo'
+                        END as estado
+                 FROM vehiculos v
+                 ${whereClause}
+                 ORDER BY v.fecha_registro DESC`;
+        }
+
+        const [vehiculos] = await pool.query(query, [req.user.id_empresa]);
 
         res.json(vehiculos);
     } catch (error) {
@@ -186,19 +225,51 @@ router.put('/:id', verifyToken, verificarPropiedadVehiculo, async (req, res) => 
 router.delete('/:id', verifyToken, verificarPropiedadVehiculo, async (req, res) => {
     try {
         // Verificar si el vehículo tiene movimientos activos
-        const [movimientos] = await pool.query(
+        const [movimientosActivos] = await pool.query(
             'SELECT id_movimiento FROM movimientos WHERE id_vehiculo = ? AND fecha_salida IS NULL',
             [req.params.id]
         );
 
-        if (movimientos.length > 0) {
+        if (movimientosActivos.length > 0) {
             return res.status(400).json({
                 success: false,
                 message: 'No se puede eliminar un vehículo con movimientos activos'
             });
         }
 
-        // Eliminar vehículo
+        // Verificar si el vehículo tiene historial de movimientos
+        const [movimientosHistoricos] = await pool.query(
+            'SELECT COUNT(*) as total FROM movimientos WHERE id_vehiculo = ?',
+            [req.params.id]
+        );
+
+        if (movimientosHistoricos[0].total > 0) {
+            // Verificar si existe la columna activo
+            try {
+                await pool.query('SELECT activo FROM vehiculos LIMIT 1');
+                // Si existe, desactivar
+                await pool.query(
+                    'UPDATE vehiculos SET activo = FALSE WHERE id_vehiculo = ? AND id_empresa = ?',
+                    [req.params.id, req.user.id_empresa]
+                );
+
+                return res.json({
+                    success: true,
+                    message: 'Vehículo desactivado exitosamente. Los vehículos con historial no se eliminan para mantener la integridad de los registros.'
+                });
+            } catch (error) {
+                if (error.code === '42703') {
+                    // Si no existe la columna, no permitir eliminación
+                    return res.status(400).json({
+                        success: false,
+                        message: 'No se puede eliminar un vehículo que tiene historial de movimientos. Para habilitar esta funcionalidad, ejecute la migración de base de datos.'
+                    });
+                }
+                throw error;
+            }
+        }
+
+        // Si no tiene historial, eliminar completamente
         await pool.query(
             'DELETE FROM vehiculos WHERE id_vehiculo = ? AND id_empresa = ?',
             [req.params.id, req.user.id_empresa]
@@ -213,6 +284,27 @@ router.delete('/:id', verifyToken, verificarPropiedadVehiculo, async (req, res) 
         res.status(500).json({
             success: false,
             message: 'Error al eliminar el vehículo'
+        });
+    }
+});
+
+// Reactivar vehículo
+router.patch('/:id/reactivar', verifyToken, verificarPropiedadVehiculo, async (req, res) => {
+    try {
+        await pool.query(
+            'UPDATE vehiculos SET activo = TRUE WHERE id_vehiculo = ? AND id_empresa = ?',
+            [req.params.id, req.user.id_empresa]
+        );
+
+        res.json({
+            success: true,
+            message: 'Vehículo reactivado exitosamente'
+        });
+    } catch (error) {
+        console.error('Error al reactivar vehículo:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error al reactivar el vehículo'
         });
     }
 });

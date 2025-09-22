@@ -10,7 +10,7 @@ USE parqueadero;
 CREATE TABLE empresas (
     id_empresa INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
-    nit VARCHAR(20) NOT NULL UNIQUE,
+    numero_cliente VARCHAR(9) NOT NULL UNIQUE,
     direccion VARCHAR(200),
     telefono VARCHAR(20),
     email VARCHAR(100),
@@ -249,10 +249,9 @@ CREATE TABLE turnos (
     INDEX idx_turno_activo (id_empresa, id_usuario, estado)
 ) ENGINE=InnoDB;
 
-
 -- Insertar empresa de ejemplo
-INSERT INTO empresas (nombre, nit, direccion, telefono, email, plan)
-VALUES ('Parqueadero Central', '900123456-7', 'Calle Principal #123', '3001234567', 'info@parqueaderocentral.com', 'premium');
+INSERT INTO empresas (nombre, numero_cliente, direccion, telefono, email, plan)
+VALUES ('Parqueadero Central', 'ABC123XYZ', 'Calle Principal #123', '3001234567', 'info@parqueaderocentral.com', 'premium');
 
 -- Insertar configuración de la empresa
 INSERT INTO configuracion_empresa (id_empresa, capacidad_total_carros, capacidad_total_motos, capacidad_total_bicicletas)

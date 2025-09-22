@@ -182,8 +182,8 @@ function initTurnosView(){
       });
     }
 
-    function fmt(n){ return new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',minimumFractionDigits:0}).format(Number(n||0)); }
-    function fmtDate(d){ return d ? new Date(d).toLocaleString('es-CO') : ''; }
+    function fmt(n){ return new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',minimumFractionDigits:0}).format(Number(n||0)); }
+    function fmtDate(d){ return d ? formatArgentinaDate(d) : ''; }
     function escHtml(s){ return String(s||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[m])); }
 
     // Exportación a Excel
@@ -206,16 +206,16 @@ function initTurnosView(){
       try{
         const r = await fetch('/api/turnos/detalle/'+id, { headers:{ 'Authorization':'Bearer '+token } });
         const j = await r.json(); if(!r.ok) throw new Error(j.message||'Error');
-        const t = j.data.turno; const exp = j.data.expected||{ total:0, efectivo:0, tarjeta:0, qr:0 }; const stats = j.data.stats||{ total:0, porTipo:{carro:0,moto:0,bici:0}};
+        const t = j.data.turno; const exp = j.data.expected||{ total:0, efectivo:0, tarjeta:0, qr:0 }; const stats = j.data.stats||{ total:0, porTipo:{auto:0,camioneta:0,moto:0}};
         const res = { user:{ efectivo:t.total_efectivo||0, tarjeta:t.total_tarjeta||0, qr:t.total_qr||0, total:t.total_general||0 }, expected: exp, diff: Number((Number(t.total_general||0) - Number(exp.total||0)).toFixed(2)), obs: t.observacion_cierre, base_inicial: t.base_inicial, turno:{ id_turno:t.id_turno, usuario: (t.usuario||t.usuario_login||'') }, stats };
         if (window.imprimirResumen){ window.imprimirResumen(res); return; }
         const html = `
           <div style="font-family:Arial,sans-serif;font-size:12px">
             <h3 style="margin:0 0 8px">Cierre de Turno</h3>
-            <div>Fecha: ${new Date().toLocaleString('es-CO')}</div>
+            <div>Fecha: ${nowInArgentina()}</div>
             <div>Turno #${res.turno.id_turno} | Usuario: ${escHtml(res.turno.usuario)}</div>
             <div>Base inicial: <strong>${fmt(res.base_inicial)}</strong></div>
-            <div>Tickets: <strong>${res.stats.total}</strong> (Carros: ${res.stats.porTipo.carro} | Motos: ${res.stats.porTipo.moto} | Bicis: ${res.stats.porTipo.bici})</div>
+            <div>Tickets: <strong>${res.stats.total}</strong> (Autos: ${res.stats.porTipo.auto} | Camionetas: ${res.stats.porTipo.camioneta} | Motos: ${res.stats.porTipo.moto})</div>
             <hr/>
             <div style="display:flex;gap:16px">
               <div>
@@ -401,7 +401,7 @@ window.reimprimirSalida = async function(idMovimiento){
             <div style="text-align:center">
                 ${empresaInfo.logo_url ? `<img src="${empresaInfo.logo_url}" alt="logo" style="max-height:60px">` : ''}
                 <div><strong>${empresaInfo.nombre||'Empresa'}</strong></div>
-                <div>NIT: ${empresaInfo.nit||''}</div>
+                <div>CUIL/CUIT: ${empresaInfo.nit||''}</div>
                 <div>${empresaInfo.direccion||''} ${empresaInfo.telefono? ' - '+empresaInfo.telefono:''}</div>
                 <div>Horario: <strong>${(empresaInfo?.operacion_24h)?'24 horas':((fmtTimeRS(empresaInfo?.horario_apertura)||'')+' - '+(fmtTimeRS(empresaInfo?.horario_cierre)||''))}</strong></div>
                 <hr/>
@@ -414,8 +414,8 @@ window.reimprimirSalida = async function(idMovimiento){
             <div>Movimiento: <strong>#${f.movimientoId}</strong></div>
             <div>Placa: <strong>${f.placa}</strong></div>
             <div>Tipo: <strong>${f.tipo}</strong></div>
-            <div>Entrada: <strong>${new Date(f.fechaEntrada).toLocaleString('es-CO')}</strong></div>
-            <div>Salida: <strong>${new Date(f.fechaSalida).toLocaleString('es-CO')}</strong></div>
+            <div>Entrada: <strong>${formatArgentinaDate(f.fechaEntrada)}</strong></div>
+            <div>Salida: <strong>${formatArgentinaDate(f.fechaSalida)}</strong></div>
             <hr/>
             <div>Tarifas</div>
             <div>Minuto: <strong>${f.tarifa.valor_minuto}</strong></div>
@@ -425,7 +425,7 @@ window.reimprimirSalida = async function(idMovimiento){
             <div>Total a pagar: <strong>${formatCurrency(f.total)}</strong></div>
             ${pagosHtml}
             <div>Atendido por: ${localStorage.getItem('userName')||''}</div>
-            <div>Fecha reimpresión: ${new Date().toLocaleString('es-CO')}</div>`;
+            <div>Fecha reimpresión: ${nowInArgentina()}</div>`;
         const printWin = window.open('','_blank','width=420,height=700');
         const doc = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Reimpresión</title>
             <style>@page{ size:80mm auto; margin: 3mm } body{ width:80mm; font-family: Arial, sans-serif; font-size:11px; margin:0 } .wrap{ padding:4mm } hr{ border:none; border-top:1px dashed #999; margin:6px 0 } img{ display:block; margin:0 auto 6px; max-width:100% } .qr{ display:flex; justify-content:center; margin-top:6px }</style>

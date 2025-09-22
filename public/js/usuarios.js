@@ -31,7 +31,7 @@ async function cargarUsuarios(){
                 <td>${u.usuario_login}</td>
                 <td><span class="badge bg-${u.rol==='admin'?'primary':'secondary'} text-uppercase">${u.rol}</span></td>
                 <td>${u.activo ? '<span class="badge bg-success">Sí</span>' : '<span class="badge bg-secondary">No</span>'}</td>
-                <td>${u.ultimo_acceso ? new Date(u.ultimo_acceso).toLocaleString('es-CO') : '-'}</td>
+                <td>${u.ultimo_acceso ? formatArgentinaDate(u.ultimo_acceso) : '-'}</td>
                 <td>
                     <button class="btn btn-sm btn-info me-1" onclick='editar(${JSON.stringify(u)})'><i class="fas fa-edit"></i></button>
                     <button class="btn btn-sm btn-warning me-1" onclick='abrirCambioClave(${JSON.stringify({id:u.id_usuario, login:u.usuario_login, nombre:u.nombre})})'><i class="fas fa-key"></i></button>

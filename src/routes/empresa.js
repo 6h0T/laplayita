@@ -14,13 +14,27 @@ const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 2 *
 router.get('/me', verifyToken, async (req, res) => {
     try {
         const [rows] = await pool.query(
-            'SELECT id_empresa, nombre, nit, direccion, telefono, email, logo_url, plan FROM empresas WHERE id_empresa = ? AND activa = TRUE',
+            'SELECT id_empresa, nombre, numero_cliente, direccion, telefono, email, logo_url, plan FROM empresas WHERE id_empresa = ? AND activa = TRUE',
             [req.user.id_empresa]
         );
+        
         if (rows.length === 0) {
             return res.status(404).json({ success: false, message: 'Empresa no encontrada' });
         }
-        res.json({ success: true, data: rows[0] });
+        
+        // Devolver solo los campos necesarios (usando numero_cliente en lugar de nit)
+        const empresa = {
+            id_empresa: rows[0].id_empresa,
+            nombre: rows[0].nombre,
+            nit: rows[0].numero_cliente, // Mapear numero_cliente a nit para compatibilidad
+            direccion: rows[0].direccion,
+            telefono: rows[0].telefono,
+            email: rows[0].email,
+            logo_url: rows[0].logo_url,
+            plan: rows[0].plan
+        };
+        
+        res.json({ success: true, data: empresa });
     } catch (error) {
         console.error('Error empresa/me:', error);
         res.status(500).json({ success: false, message: 'Error al obtener la empresa' });

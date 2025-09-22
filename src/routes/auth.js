@@ -44,7 +44,7 @@ router.post('/login', validateLoginData, async (req, res) => {
     try {
         // Buscar la empresa
         const [empresas] = await pool.query(
-            'SELECT id_empresa FROM empresas WHERE nit = ? AND activa = true',
+            'SELECT id_empresa FROM empresas WHERE numero_cliente = ? AND activa = true',
             [empresa]
         );
 

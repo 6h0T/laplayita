@@ -115,11 +115,11 @@ async function loadDashboardData() {
 // Función para actualizar las estadísticas
 function updateDashboardStats(data) {
     // Actualizar contadores por tipo
-    const map = { carro: 0, moto: 0, bici: 0 };
+    const map = { auto: 0, camioneta: 0, moto: 0 };
     (data.currentVehiclesByType || []).forEach(r => { map[r.tipo] = r.count; });
-    document.getElementById('currCarros').textContent = map.carro || 0;
-    document.getElementById('currMotos').textContent = map.moto || 0;
-    document.getElementById('currBicis').textContent = map.bici || 0;
+    document.getElementById('currCarros').textContent = map.auto || 0;
+    document.getElementById('currMotos').textContent = map.camioneta || 0;
+    document.getElementById('currBicis').textContent = map.moto || 0;
     document.getElementById('todayIncome').textContent = formatCurrency(data.todayIncome || 0);
     // Ocupación: consultar KPI de reportes para hoy
     setOcupacionKpi();
@@ -188,8 +188,8 @@ window.viewDetails = async function(idMovimiento) {
                   <div class="modal-body">
                     <div><strong>Placa:</strong> ${m.placa}</div>
                     <div><strong>Tipo:</strong> ${m.tipo}</div>
-                    <div><strong>Entrada:</strong> ${new Date(m.fecha_entrada).toLocaleString('es-CO')}</div>
-                    ${m.fecha_salida ? `<div><strong>Salida:</strong> ${new Date(m.fecha_salida).toLocaleString('es-CO')}</div>` : ''}
+                    <div><strong>Entrada:</strong> ${formatArgentinaDate(m.fecha_entrada)}</div>
+                    ${m.fecha_salida ? `<div><strong>Salida:</strong> ${formatArgentinaDate(m.fecha_salida)}</div>` : ''}
                     ${m.total_a_pagar ? `<div><strong>Total:</strong> ${formatCurrency(m.total_a_pagar)}</div>` : ''}
                   </div>
                   <div class="modal-footer">
@@ -239,7 +239,7 @@ window.checkoutVehicle = async function(idMovimiento) {
                   <div class="modal-body">
                     <div class="mb-2"><strong>Placa:</strong> ${m.placa}</div>
                     <div class="mb-2"><strong>Tipo:</strong> ${m.tipo}</div>
-                    <div class="mb-2"><strong>Entrada:</strong> ${new Date(m.fecha_entrada).toLocaleString('es-CO')}</div>
+                    <div class="mb-2"><strong>Entrada:</strong> ${formatArgentinaDate(m.fecha_entrada)}</div>
                     <div class="mt-3">
                       <label class="form-label">Método de pago</label>
                       <select class="form-select" id="checkoutMetodo">
@@ -323,39 +323,19 @@ window.checkoutVehicle = async function(idMovimiento) {
 function renderTicketSalida(salida, empresa){
     const e = empresa || {};
     const header = `
-        <div style="text-align:center">
-            ${e.logo_url ? `<img src="${e.logo_url}" alt="logo" style="max-height:60px">` : ''}
-            <div><strong>${e.nombre||'Empresa'}</strong></div>
-            <div>NIT: ${e.nit||''}</div>
+        <div style="text-align:center; margin-bottom:8px">
+            <img src="../playita.png" alt="La Playita" style="max-height:60px; width: auto;">
+            <div><strong>La Playita</strong></div>
             <div>${e.direccion||''} ${e.telefono? ' - '+e.telefono:''}</div>
             <hr/>
             <div><strong>SALIDA</strong></div>
         </div>`;
-    // Pie de ticket con crédito y enlace/ícono de YouTube de Ciscode
-    const ciscodeFooter = `
-        <hr/>
-        <div style="text-align:center;margin-top:6px">
-            <div>Desarrollado por <strong>Ciscode</strong></div>
-            <div>
-                <a href="https://ciscode.co" target="_blank" style="text-decoration:none;color:#000">ciscode.co</a>
-                &nbsp;|&nbsp;
-                <a href="https://www.youtube.com/@Ciscode" target="_blank" aria-label="YouTube Ciscode" style="display:inline-flex;align-items:center;gap:4px;text-decoration:none;color:#000">
-                    <span>
-                        <svg width="18" height="12" viewBox="0 0 24 17" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                            <path d="M23.5 2.6a3 3 0 0 0-2.1-2.1C19.5 0 12 0 12 0s-7.5 0-9.4.5A3 3 0 0 0 .5 2.6 31 31 0 0 0 0 8.5a31 31 0 0 0 .5 5.9 3 3 0 0 0 2.1 2.1C4.5 17 12 17 12 17s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-5.9 31 31 0 0 0-.5-5.9z" fill="#FF0000"/>
-                            <path d="M9.75 12.25V4.75L15.5 8.5l-5.75 3.75z" fill="#fff"/>
-                        </svg>
-                    </span>
-                    <span style="font-size:10px">YouTube</span>
-                </a>
-            </div>
-        </div>`;
-    return `${header}
+    const body = `
         <div>Movimiento: <strong>#${salida.movimientoId}</strong></div>
         <div>Placa: <strong>${salida.placa}</strong></div>
         <div>Tipo: <strong>${salida.tipo}</strong></div>
-        <div>Entrada: <strong>${new Date(salida.fechaEntrada).toLocaleString('es-CO')}</strong></div>
-        <div>Salida: <strong>${new Date(salida.fechaSalida).toLocaleString('es-CO')}</strong></div>
+        <div>Entrada: <strong>${formatArgentinaDate(salida.fechaEntrada)}</strong></div>
+        <div>Salida: <strong>${formatArgentinaDate(salida.fechaSalida)}</strong></div>
         <div>Tiempo: <strong>${salida.detalleTiempo.dias}d ${salida.detalleTiempo.horas}h ${salida.detalleTiempo.minutos}m</strong></div>
         <hr/>
         <div>Tarifas</div>
@@ -365,8 +345,9 @@ function renderTicketSalida(salida, empresa){
         <hr/>
         <div>Total a pagar: <strong>${formatCurrency(salida.total)}</strong></div>
         <div>Atendido por: ${localStorage.getItem('userName')||''}</div>
-        <div>Fecha impresión: ${new Date().toLocaleString('es-CO')}</div>
-        ${ciscodeFooter}`;
+        <div>Fecha impresión: ${nowInArgentina()}</div>
+    `;
+    return header + body;
 }
 
 // Ventana de impresión tipo ticket con QR opcional
@@ -451,4 +432,15 @@ function showToast(title, message, type) {
     const toast = new bootstrap.Toast(el, { delay: 3500 });
     toast.show();
     el.addEventListener('hidden.bs.toast', () => el.remove());
+}
+
+// Funciones para los botones de ingreso y salida
+function registrarIngreso() {
+    // Redirigir a la página de ingreso-salida con parámetro para mostrar solo ingreso
+    window.location.href = 'ingreso-salida.html?action=ingreso';
+}
+
+function registrarSalida() {
+    // Redirigir a la página de ingreso-salida con parámetro para mostrar solo salida
+    window.location.href = 'ingreso-salida.html?action=salida';
 }

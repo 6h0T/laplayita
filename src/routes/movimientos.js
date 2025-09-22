@@ -153,29 +153,51 @@ router.post('/ingreso', verifyToken, async (req, res) => {
 // Registrar salida y calcular total
 router.post('/salida', verifyToken, async (req, res) => {
     try {
-        const { placa, metodoPago } = req.body;
+        const { placa, id_movimiento, metodoPago } = req.body;
         const idEmpresa = req.user.id_empresa;
-        if (!placa) {
-            return res.status(400).json({ success: false, message: 'Placa es obligatoria' });
-        }
+        
+        let mov, vehiculo;
+        
+        if (id_movimiento) {
+            // Buscar por ID de movimiento (nuevo método)
+            const [movs] = await pool.query(
+                `SELECT m.*, v.id_vehiculo, v.tipo, v.placa 
+                 FROM movimientos m 
+                 JOIN vehiculos v ON m.id_vehiculo = v.id_vehiculo 
+                 WHERE m.id_movimiento = ? AND m.id_empresa = ? AND m.fecha_salida IS NULL`,
+                [id_movimiento, idEmpresa]
+            );
+            if (movs.length === 0) {
+                return res.status(404).json({ success: false, message: 'Movimiento no encontrado o ya finalizado' });
+            }
+            mov = movs[0];
+            vehiculo = { id_vehiculo: mov.id_vehiculo, tipo: mov.tipo, placa: mov.placa };
+        } else if (placa) {
+            // Buscar por placa (método original)
+            if (!placa) {
+                return res.status(400).json({ success: false, message: 'Placa o ID de movimiento es obligatorio' });
+            }
 
-        const [vehiculos] = await pool.query(
-            'SELECT id_vehiculo, tipo FROM vehiculos WHERE placa = ? AND id_empresa = ?',
-            [placa, idEmpresa]
-        );
-        if (vehiculos.length === 0) {
-            return res.status(404).json({ success: false, message: 'Vehículo no encontrado' });
-        }
-        const vehiculo = vehiculos[0];
+            const [vehiculos] = await pool.query(
+                'SELECT id_vehiculo, tipo FROM vehiculos WHERE placa = ? AND id_empresa = ?',
+                [placa, idEmpresa]
+            );
+            if (vehiculos.length === 0) {
+                return res.status(404).json({ success: false, message: 'Vehículo no encontrado' });
+            }
+            vehiculo = vehiculos[0];
 
-        const [movs] = await pool.query(
-            'SELECT * FROM movimientos WHERE id_vehiculo = ? AND fecha_salida IS NULL',
-            [vehiculo.id_vehiculo]
-        );
-        if (movs.length === 0) {
-            return res.status(404).json({ success: false, message: 'El vehículo no tiene ingreso activo' });
+            const [movs] = await pool.query(
+                'SELECT * FROM movimientos WHERE id_vehiculo = ? AND fecha_salida IS NULL',
+                [vehiculo.id_vehiculo]
+            );
+            if (movs.length === 0) {
+                return res.status(404).json({ success: false, message: 'El vehículo no tiene ingreso activo' });
+            }
+            mov = movs[0];
+        } else {
+            return res.status(400).json({ success: false, message: 'Placa o ID de movimiento es obligatorio' });
         }
-        const mov = movs[0];
 
         const tarifa = await obtenerTarifaActiva(idEmpresa, vehiculo.tipo);
         if (!tarifa) {
@@ -187,7 +209,15 @@ router.post('/salida', verifyToken, async (req, res) => {
             [mov.fecha_entrada]
         );
         const minutos = tiempo[0].minutos;
+        
+        // Debug logs
+        console.log('Fecha entrada:', mov.fecha_entrada);
+        console.log('Minutos transcurridos:', minutos);
+        console.log('Tarifa:', tarifa);
+        
         const { total, dias, horas, minutos: mins } = calcularTotal({ minutos, tarifa });
+        
+        console.log('Total calculado:', total);
 
         await pool.query(
             `UPDATE movimientos SET fecha_salida = CURRENT_TIMESTAMP, total_a_pagar = ?, estado = 'finalizado', id_usuario_salida = ?
@@ -205,7 +235,7 @@ router.post('/salida', verifyToken, async (req, res) => {
 
         const factura = {
             movimientoId: mov.id_movimiento,
-            placa: placa.toUpperCase(),
+            placa: vehiculo.placa.toUpperCase(),
             tipo: vehiculo.tipo,
             fechaEntrada: mov.fecha_entrada,
             fechaSalida: new Date().toISOString(),
@@ -222,6 +252,46 @@ router.post('/salida', verifyToken, async (req, res) => {
     } catch (error) {
         console.error('Error salida:', error);
         res.status(500).json({ success: false, message: 'Error al registrar salida' });
+    }
+});
+
+// Obtener vehículos actualmente estacionados
+router.get('/activos', verifyToken, async (req, res) => {
+    try {
+        const [vehiculos] = await pool.query(
+            `SELECT 
+                m.id_movimiento,
+                v.id_vehiculo,
+                v.placa,
+                v.tipo,
+                v.color,
+                v.modelo,
+                m.fecha_entrada,
+                t.tipo_vehiculo as tarifa_tipo,
+                t.valor_minuto,
+                t.valor_hora,
+                t.valor_dia_completo,
+                TIMESTAMPDIFF(MINUTE, m.fecha_entrada, CURRENT_TIMESTAMP) as minutos_transcurridos
+            FROM movimientos m
+            JOIN vehiculos v ON m.id_vehiculo = v.id_vehiculo
+            JOIN tarifas t ON m.id_tarifa = t.id_tarifa
+            WHERE m.id_empresa = ? 
+            AND m.fecha_salida IS NULL 
+            AND m.estado = 'activo'
+            ORDER BY m.fecha_entrada DESC`,
+            [req.user.id_empresa]
+        );
+
+        res.json({
+            success: true,
+            data: vehiculos
+        });
+    } catch (error) {
+        console.error('Error al obtener vehículos activos:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error al obtener vehículos activos'
+        });
     }
 });
 

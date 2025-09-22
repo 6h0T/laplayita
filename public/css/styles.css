@@ -12,14 +12,22 @@ body {
 }
 
 .logo-circle {
-    width: 80px;
-    height: 80px;
-    background-color: #1a237e;
+    width: 150px;
+    height: 150px;
+    background-color: white;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     box-shadow: 0 4px 12px rgba(26, 35, 126, 0.2);
+    overflow: hidden;
+}
+
+.logo-circle img {
+    width: 140px;
+    height: 140px;
+    object-fit: contain;
+    border-radius: 50%;
 }
 
 .logo-text {
@@ -50,14 +58,14 @@ body {
 }
 
 .form-control:focus {
-    border-color: #1a237e;
-    box-shadow: 0 0 0 0.2rem rgba(26, 35, 126, 0.15);
+    border-color: #7986cb;
+    box-shadow: 0 0 0 0.2rem rgba(121, 134, 203, 0.15);
 }
 
 /* Estilos para los botones */
 .btn-primary {
-    background-color: #1a237e;
-    border-color: #1a237e;
+    background-color: #7986cb;
+    border-color: #7986cb;
     border-radius: 8px;
     font-weight: 500;
     letter-spacing: 0.3px;
@@ -65,10 +73,10 @@ body {
 }
 
 .btn-primary:hover {
-    background-color: #151b60;
-    border-color: #151b60;
+    background-color: #5c6bc0;
+    border-color: #5c6bc0;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(26, 35, 126, 0.2);
+    box-shadow: 0 4px 12px rgba(121, 134, 203, 0.2);
 }
 
 /* Estilos para el botón de mostrar/ocultar contraseña */
@@ -76,31 +84,31 @@ body {
     border-left: none;
     background-color: white;
     border-color: #e0e0e0;
-    color: #1a237e;
+    color: #7986cb;
     transition: all 0.3s ease;
 }
 
 #togglePassword:hover {
     background-color: #f8f9fa;
-    color: #151b60;
+    color: #5c6bc0;
 }
 
 #togglePassword:focus {
     box-shadow: none;
-    border-color: #1a237e;
+    border-color: #7986cb;
 }
 
 /* Estilos para los iconos en los inputs */
 .input-group-text {
-    background-color: #1a237e;
+    background-color: #7986cb;
     border: none;
     padding: 0.75rem 1rem;
 }
 
 /* Estilos para el checkbox */
 .form-check-input:checked {
-    background-color: #1a237e;
-    border-color: #1a237e;
+    background-color: #7986cb;
+    border-color: #7986cb;
 }
 
 /* Estilos para el footer y redes sociales */
@@ -109,14 +117,14 @@ body {
 }
 
 .social-link {
-    color: #1a237e;
+    color: #7986cb;
     font-size: 1.5rem;
     margin: 0 10px;
     transition: all 0.3s ease;
 }
 
 .social-link:hover {
-    color: #151b60;
+    color: #5c6bc0;
     transform: translateY(-3px);
 }
 

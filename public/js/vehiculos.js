@@ -25,28 +25,44 @@ document.addEventListener('DOMContentLoaded', function() {
             { 
                 data: 'fecha_registro',
                 render: function(data) {
-                    return new Date(data).toLocaleString('es-CO');
+                    return formatArgentinaDate(data);
                 }
             },
             { 
                 data: 'estado',
                 render: function(data) {
-                    return data === 'activo' 
-                        ? '<span class="badge bg-success">Activo</span>'
-                        : '<span class="badge bg-secondary">Inactivo</span>';
+                    switch(data) {
+                        case 'activo':
+                            return '<span class="badge bg-success">En parqueadero</span>';
+                        case 'inactivo':
+                            return '<span class="badge bg-secondary">Disponible</span>';
+                        case 'desactivado':
+                            return '<span class="badge bg-warning">Desactivado</span>';
+                        default:
+                            return '<span class="badge bg-secondary">Inactivo</span>';
+                    }
                 }
             },
             {
                 data: null,
                 render: function(data, type, row) {
-                    return `
-                        <button class="btn btn-sm btn-info me-1" onclick="editarVehiculo(${row.id_vehiculo})">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn btn-sm btn-danger" onclick="eliminarVehiculo(${row.id_vehiculo})">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    `;
+                    if (row.estado === 'desactivado') {
+                        return `
+                            <button class="btn btn-sm btn-success me-1" onclick="reactivarVehiculo(${row.id_vehiculo})" title="Reactivar vehículo">
+                                <i class="fas fa-undo"></i>
+                            </button>
+                            <span class="text-muted small">Desactivado</span>
+                        `;
+                    } else {
+                        return `
+                            <button class="btn btn-sm btn-info me-1" onclick="editarVehiculo(${row.id_vehiculo})" title="Editar vehículo">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="eliminarVehiculo(${row.id_vehiculo})" title="Eliminar vehículo">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        `;
+                    }
                 }
             }
         ]
@@ -78,7 +94,10 @@ document.addEventListener('DOMContentLoaded', function() {
 // Función para cargar vehículos
 async function cargarVehiculos() {
     try {
-        const response = await fetch('/api/vehiculos', {
+        const mostrarDesactivados = document.getElementById('mostrarDesactivados')?.checked || false;
+        const url = `/api/vehiculos${mostrarDesactivados ? '?incluir_inactivos=true' : ''}`;
+        
+        const response = await fetch(url, {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
@@ -238,8 +257,8 @@ async function verHistorial(idVehiculo, placa){
                 return `
                 <tr>
                     <td>${r.id_movimiento}</td>
-                    <td>${new Date(r.fecha_entrada).toLocaleString('es-CO')}</td>
-                    <td>${r.fecha_salida ? new Date(r.fecha_salida).toLocaleString('es-CO') : '-'}</td>
+                    <td>${formatArgentinaDate(r.fecha_entrada)}</td>
+                    <td>${r.fecha_salida ? formatArgentinaDate(r.fecha_salida) : '-'}</td>
                     <td><span class="badge bg-${badgeEstado}">${r.estado}</span></td>
                     <td>${total ? fmt(total) : '-'}</td>
                     <td>${pagosResumen}</td>
@@ -263,6 +282,36 @@ function mostrarExito(mensaje) {
 function mostrarError(mensaje) {
     // Implementar según el sistema de notificaciones que prefieras
     alert('Error: ' + mensaje);
+}
+
+// Función para reactivar vehículo
+async function reactivarVehiculo(id) {
+    if (!confirm('¿Está seguro de que desea reactivar este vehículo?')) {
+        return;
+    }
+
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`/api/vehiculos/${id}/reactivar`, {
+            method: 'PATCH',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            mostrarExito(data.message);
+            cargarVehiculos(); // Recargar la tabla
+        } else {
+            mostrarError(data.message);
+        }
+    } catch (error) {
+        mostrarError('Error al reactivar el vehículo');
+        console.error('Error:', error);
+    }
 }
 
 // Función para cerrar sesión

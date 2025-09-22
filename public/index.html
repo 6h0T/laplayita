@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ParkSystem - Inicio de Sesión</title>
+    <title>La Playita - Inicio de Sesión</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts -->
@@ -23,31 +23,31 @@
                         <div class="text-center mb-4">
                             <div class="logo-container mb-4">
                                 <div class="logo-circle">
-                                    <span class="logo-text">PS</span>
+                                    <img src="playita.png" alt="La Playita">
                                 </div>
                             </div>
-                            <h2 class="fw-bold text-primary">ParkSystem</h2>
+                            <h2 class="fw-bold text-primary">La Playita</h2>
                             <p class="text-muted">Sistema de Gestión de Parqueadero</p>
                         </div>
 
                         <!-- Formulario de Login -->
                         <form id="loginForm" class="needs-validation" novalidate>
-                            <!-- Campo NIT Empresa -->
+                            <!-- Campo Número de Cliente -->
                             <div class="mb-4">
-                                <label for="empresa" class="form-label">NIT Empresa</label>
+                                <label for="empresa" class="form-label">Número de Cliente</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-primary text-white">
-                                        <i class="fas fa-building"></i>
+                                        <i class="fas fa-id-card"></i>
                                     </span>
                                     <input type="text" 
                                            class="form-control" 
                                            id="empresa" 
                                            name="empresa" 
                                            required 
-                                           placeholder="Ej: 900123456-7"
-                                           value="900123456-7">
+                                           placeholder="Ej: ABC123XYZ"
+                                           maxlength="9">
                                     <div class="invalid-feedback">
-                                        Por favor ingrese el NIT de la empresa
+                                        Por favor ingrese su número de cliente
                                     </div>
                                 </div>
                             </div>
@@ -99,20 +99,9 @@
                     </div>
                 </div>
 
-                <!-- Footer con redes sociales -->
+                <!-- Footer -->
                 <footer class="text-center mt-4">
-                    <div class="social-links">
-                        <a href="https://www.instagram.com/cristiancano1236/" target="_blank" class="social-link">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="https://www.youtube.com/@Ciscodedev" target="_blank" class="social-link">
-                            <i class="fab fa-youtube"></i>
-                        </a>
-                        <a href="https://github.com/Cristiancano1236" target="_blank" class="social-link">
-                            <i class="fab fa-github"></i>
-                        </a>
-                    </div>
-                    <p class="mt-2 text-muted">Desarrollado por Cristian Cano</p>
+                    <p class="mt-2 text-muted">La Playita - Sistema de Parqueadero</p>
                 </footer>
             </div>
         </div>

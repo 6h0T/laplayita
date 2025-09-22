@@ -76,8 +76,8 @@ async function cargarConfig(){
         document.getElementById('c_apertura').value = (c.horario_apertura||'').toString().substring(0,5);
         document.getElementById('c_cierre').value = (c.horario_cierre||'').toString().substring(0,5);
         document.getElementById('c_iva').value = c.iva_porcentaje ?? 0;
-        document.getElementById('c_moneda').value = c.moneda || 'COP';
-        document.getElementById('c_tz').value = c.zona_horaria || 'America/Bogota';
+        document.getElementById('c_moneda').value = c.moneda || 'ARS';
+        document.getElementById('c_tz').value = c.zona_horaria || 'America/Argentina/Buenos_Aires';
         const chk = document.getElementById('c_24h');
         if (chk) {
             chk.checked = !!c.operacion_24h;
@@ -116,8 +116,8 @@ async function guardarConfig(){
         horario_apertura: document.getElementById('c_apertura').value,
         horario_cierre: document.getElementById('c_cierre').value,
         iva_porcentaje: Number(document.getElementById('c_iva').value||0),
-        moneda: document.getElementById('c_moneda').value.trim()||'COP',
-        zona_horaria: document.getElementById('c_tz').value.trim()||'America/Bogota',
+        moneda: document.getElementById('c_moneda').value.trim()||'ARS',
+        zona_horaria: document.getElementById('c_tz').value.trim()||'America/Argentina/Buenos_Aires',
         operacion_24h: document.getElementById('c_24h').checked
     };
     const btn = document.getElementById('btnSaveConfig');

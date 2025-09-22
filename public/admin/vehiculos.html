@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ParkSystem - Gestión de Vehículos</title>
+    <title>La Playita - Vehículos</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts -->
@@ -21,10 +21,10 @@
         <div class="sidebar-header">
             <div class="logo-container">
                 <div class="logo-circle">
-                    <span class="logo-text">PS</span>
+                    <img src="../playita.png" alt="La Playita">
                 </div>
             </div>
-            <h5 class="mt-3 text-white">ParkSystem</h5>
+            <h5 class="mt-3 text-white">La Playita</h5>
         </div>
         <nav class="sidebar-nav">
             <ul class="nav flex-column">
@@ -124,13 +124,21 @@
                                 <div class="col-md-3">
                                     <select class="form-select" id="filtroTipo">
                                         <option value="">Todos los tipos</option>
-                                        <option value="carro">Carros</option>
+                                        <option value="auto">Autos</option>
+                                        <option value="camioneta">Camionetas</option>
                                         <option value="moto">Motos</option>
-                                        <option value="bici">Bicicletas</option>
                                     </select>
                                 </div>
                                 <div class="col-md-3">
                                     <input type="text" class="form-control" id="filtroPlaca" placeholder="Buscar por placa">
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="checkbox" id="mostrarDesactivados" onchange="cargarVehiculos()">
+                                        <label class="form-check-label" for="mostrarDesactivados">
+                                            Mostrar desactivados
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
 
@@ -211,9 +219,9 @@
                             <label for="tipo" class="form-label">Tipo</label>
                             <select class="form-select" id="tipo" required>
                                 <option value="">Seleccione un tipo</option>
-                                <option value="carro">Carro</option>
+                                <option value="auto">Auto</option>
+                                <option value="camioneta">Camioneta</option>
                                 <option value="moto">Moto</option>
-                                <option value="bici">Bicicleta</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -241,6 +249,7 @@
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
     <!-- Footer global (reutilizable). Relacionado con public/js/footer.js -->
     <script src="../js/footer.js"></script>
+    <script src="../js/timezone-utils.js"></script>
     <script src="../js/vehiculos.js"></script>
 </body>
 </html>

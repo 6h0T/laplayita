@@ -148,6 +148,6 @@ schema.sql             # Esquema, vistas, procedimiento y datos seed
 - Asegúrese de configurar `JWT_SECRET` en producción.
 
 ### Licencia
-ISC © Ciscode
+Propietaria © gh0tstudio.com
 
 

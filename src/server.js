@@ -3,6 +3,9 @@ const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
 
+// Configurar zona horaria para Buenos Aires
+process.env.TZ = 'America/Argentina/Buenos_Aires';
+
 const app = express();
 
 // Middleware
