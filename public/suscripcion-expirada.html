@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suscripción Expirada - La Playita</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .expired-card {
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            overflow: hidden;
+        }
+        .expired-header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 60px 40px;
+            text-align: center;
+            color: white;
+        }
+        .expired-icon {
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 50px;
+            backdrop-filter: blur(10px);
+        }
+        .expired-body {
+            padding: 40px;
+        }
+        .contact-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 30px;
+            color: white;
+            margin-bottom: 20px;
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            margin-bottom: 15px;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s;
+        }
+        .contact-item:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(5px);
+        }
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        .feature-list li {
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .feature-list li::before {
+            content: "✓";
+            color: #667eea;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="expired-card">
+        <!-- Header -->
+        <div class="expired-header">
+            <div class="expired-icon">
+                ⏰
+            </div>
+            <h1 class="fw-bold mb-3">Tu Prueba ha Finalizado</h1>
+            <p class="mb-0">Tu período de prueba de 7 días ha terminado</p>
+        </div>
+
+        <!-- Body -->
+        <div class="expired-body">
+            <h4 class="text-center mb-4">¿Te gustó La Playita?</h4>
+            <p class="text-center text-muted mb-4">
+                Continúa disfrutando de todas las funcionalidades del sistema por solo <strong>$80.000</strong> (pago único).
+            </p>
+
+            <!-- Contacto -->
+            <div class="contact-card">
+                <h5 class="mb-3 text-center">📞 Contáctanos para Activar</h5>
+                
+                <a href="mailto:laplayitaestacionamiento@gmail.com" class="contact-item">
+                    <div class="contact-icon">
+                        <i class="bi bi-envelope-fill"></i>
+                    </div>
+                    <div>
+                        <div class="fw-bold">Email</div>
+                        <div style="font-size: 14px; opacity: 0.9;">laplayitaestacionamiento@gmail.com</div>
+                    </div>
+                </a>
+
+                <a href="https://wa.me/5492611234567" target="_blank" class="contact-item">
+                    <div class="contact-icon">
+                        <i class="bi bi-whatsapp"></i>
+                    </div>
+                    <div>
+                        <div class="fw-bold">WhatsApp</div>
+                        <div style="font-size: 14px; opacity: 0.9;">+54 9 261 123-4567</div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Beneficios -->
+            <div class="mb-4">
+                <h5 class="mb-3">Con tu activación obtienes:</h5>
+                <ul class="feature-list">
+                    <li>Acceso ilimitado a todas las funciones</li>
+                    <li>Vehículos y usuarios ilimitados</li>
+                    <li>Reportes completos y exportación a Excel</li>
+                    <li>Actualizaciones gratuitas de por vida</li>
+                    <li>Soporte técnico incluido</li>
+                    <li>Sin costos mensuales</li>
+                </ul>
+            </div>
+
+            <!-- Precio -->
+            <div class="text-center mb-4">
+                <div class="p-4 bg-light rounded-3">
+                    <div class="text-muted mb-2">Inversión única</div>
+                    <div class="display-4 fw-bold text-primary">$80.000</div>
+                    <div class="text-muted">Pago único - Sin mensualidades</div>
+                </div>
+            </div>
+
+            <!-- Botones -->
+            <div class="d-grid gap-2">
+                <a href="mailto:laplayitaestacionamiento@gmail.com" class="btn btn-primary btn-primary-custom">
+                    <i class="bi bi-envelope-fill me-2"></i>
+                    Contactar por Email
+                </a>
+                <a href="https://wa.me/5492611234567" target="_blank" class="btn btn-success">
+                    <i class="bi bi-whatsapp me-2"></i>
+                    Contactar por WhatsApp
+                </a>
+                <a href="/" class="btn btn-outline-secondary">
+                    <i class="bi bi-box-arrow-left me-2"></i>
+                    Volver al Login
+                </a>
+            </div>
+
+            <!-- Info adicional -->
+            <div class="text-center mt-4">
+                <small class="text-muted">
+                    <i class="bi bi-shield-check"></i>
+                    Tus datos están seguros y se mantendrán guardados
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

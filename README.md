@@ -196,15 +196,39 @@ schema.sql             # Esquema, vistas, procedimiento y datos seed
 4. Push a la rama (`git push origin feature/AmazingFeature`)
 5. Abre un Pull Request
 
+## 🌐 Landing Page
+
+El proyecto incluye una landing page moderna desarrollada con **Next.js 14** en la carpeta `/landing`.
+
+### Características de la Landing
+- ✨ Diseño moderno con Tailwind CSS
+- 📱 Totalmente responsive
+- ⚡ Optimizado para SEO
+- 🎨 Paleta de colores pastel coherente con el sistema
+
+### Iniciar la Landing Page
+
+```bash
+cd landing
+npm install
+npm run dev
+```
+
+La landing estará disponible en: http://localhost:3001
+
+**Nota:** La landing page corre en el puerto 3001 para no interferir con el sistema principal (puerto 3000).
+
+Para más información, consulta el [README de la landing](landing/README.md).
+
 ## 📄 Licencia
 
 Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.
 
 ## 👨‍💻 Autor
 
-**Tu Nombre**
-- GitHub: [@tu-usuario](https://github.com/tu-usuario)
-- Email: tu-email@ejemplo.com
+**gh0tstudio.com**
+- Sistema desarrollado para La Playita
+- Email: info@laplayita.com
 
 ---
 

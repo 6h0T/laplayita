@@ -13,17 +13,32 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
 
-// Rutas API
+// Importar middlewares de autenticación
+const auth = require('./middleware/auth');
+const checkSubscription = require('./middleware/checkSubscription');
+
+// ===== RUTAS PÚBLICAS (sin autenticación) =====
+app.use('/api/registro', require('./routes/registro'));
 app.use('/api/auth', require('./routes/auth'));
-app.use('/api/vehiculos', require('./routes/vehiculos'));
-app.use('/api/movimientos', require('./routes/movimientos'));
-app.use('/api/dashboard', require('./routes/dashboard'));
-app.use('/api/empresa', require('./routes/empresa'));
-app.use('/api/tarifas', require('./routes/tarifas'));
-app.use('/api/pagos', require('./routes/pagos'));
-app.use('/api/usuarios', require('./routes/usuarios'));
-app.use('/api/reportes', require('./routes/reportes'));
-app.use('/api/turnos', require('./routes/turnos'));
+
+// ===== RUTAS PROTEGIDAS CON VERIFICACIÓN DE SUSCRIPCIÓN =====
+// Estas rutas requieren login Y que la suscripción esté activa
+app.use('/api/vehiculos', auth, checkSubscription, require('./routes/vehiculos'));
+app.use('/api/movimientos', auth, checkSubscription, require('./routes/movimientos'));
+app.use('/api/dashboard', auth, checkSubscription, require('./routes/dashboard'));
+app.use('/api/reportes', auth, checkSubscription, require('./routes/reportes'));
+app.use('/api/turnos', auth, checkSubscription, require('./routes/turnos'));
+app.use('/api/pagos', auth, checkSubscription, require('./routes/pagos'));
+
+// ===== RUTAS PROTEGIDAS SIN VERIFICACIÓN DE SUSCRIPCIÓN =====
+// Estas permiten ver info básica aunque la suscripción esté expirada
+app.use('/api/empresa', auth, require('./routes/empresa'));
+app.use('/api/tarifas', auth, require('./routes/tarifas'));
+app.use('/api/usuarios', auth, require('./routes/usuarios'));
+app.use('/api/suscripcion', auth, require('./routes/suscripcion'));
+
+// ===== RUTAS DE ADMINISTRACIÓN =====
+app.use('/api/admin', require('./routes/admin'));
 
 // Rutas de vistas
 app.get('/', (req, res) => {
