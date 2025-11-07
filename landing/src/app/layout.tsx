@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     siteName: 'La Playita',
     images: [
       {
-        url: '/playita.png',
+        url: '/metadata.jpg',
         width: 1200,
         height: 630,
         alt: 'La Playita - Sistema de Gestión de Estacionamiento',
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'La Playita - Sistema de Gestión de Estacionamiento',
     description: 'Sistema moderno y completo para la gestión de playas de estacionamiento.',
-    images: ['/playita.png'],
+    images: ['/metadata.jpg'],
   },
   icons: {
     icon: [
