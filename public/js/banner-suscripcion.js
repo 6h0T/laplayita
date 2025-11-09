@@ -56,11 +56,11 @@
 
         const colores = {
             info: {
-                bg: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                bg: 'linear-gradient(90deg, #7986cb 0%, #5c6bc0 100%)',
                 icon: '⏰'
             },
             warning: {
-                bg: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                bg: 'linear-gradient(90deg, #7986cb 0%, #5c6bc0 100%)',
                 icon: '⚠️'
             }
         };
