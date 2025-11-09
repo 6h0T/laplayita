@@ -9,7 +9,14 @@ process.env.TZ = 'America/Argentina/Buenos_Aires';
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: [
+    'https://laplayita.vercel.app',
+    'http://localhost:3001', // Para desarrollo del landing
+    'http://localhost:3000'  // Para desarrollo local
+  ],
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
 

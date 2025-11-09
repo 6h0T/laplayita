@@ -71,7 +71,7 @@ export default function Pricing() {
                 </div>
 
                 <a
-                  href="/index.html"
+                  href="https://laplayita-production.up.railway.app/index.html"
                   className="inline-flex items-center gap-2 bg-white text-primary-600 font-bold text-base md:text-lg py-3 px-8 rounded-full hover:bg-gray-100 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
                 >
                   <Zap size={20} />
