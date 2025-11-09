@@ -80,8 +80,8 @@ export default function RegistroPage() {
       <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center p-4">
         <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8">
           <div className="text-center mb-6">
-            <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-white text-4xl">✓</span>
+            <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl p-4 border-4 border-green-500">
+              <img src="/logo-la-playita.svg" alt="La Playita Logo" className="w-full h-full object-contain" />
             </div>
             <h2 className="text-2xl font-bold text-gray-800 mb-2">¡Registro Exitoso!</h2>
             <p className="text-gray-600">Tu cuenta ha sido creada correctamente</p>
@@ -131,8 +131,8 @@ export default function RegistroPage() {
             <div className="lg:col-span-2 bg-gradient-to-br from-blue-500 to-purple-600 p-8 lg:p-12 text-white relative overflow-hidden">
               <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
               <div className="relative z-10">
-                <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mb-6 shadow-xl">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full"></div>
+                <div className="w-32 h-32 bg-white rounded-full flex items-center justify-center mb-6 shadow-xl p-4">
+                  <img src="/logo-la-playita.svg" alt="La Playita Logo" className="w-full h-full object-contain" />
                 </div>
                 
                 <h2 className="text-3xl font-bold mb-4">¡Bienvenido a La Playita!</h2>

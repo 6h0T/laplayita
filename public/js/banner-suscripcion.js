@@ -80,36 +80,36 @@
             <div id="banner-suscripcion" style="
                 position: fixed;
                 top: 0;
-                left: 0;
+                left: 240px;
                 right: 0;
                 background: ${config.bg};
                 color: white;
-                padding: 12px 20px;
+                padding: 10px 20px;
                 text-align: center;
-                z-index: 9999;
+                z-index: 1000;
                 box-shadow: 0 2px 10px rgba(0,0,0,0.2);
                 font-family: 'Poppins', sans-serif;
             ">
-                <div style="max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <span style="font-size: 24px;">${config.icon}</span>
-                        <span style="font-size: 15px;">${mensaje}</span>
+                        <span style="font-size: 20px;">${config.icon}</span>
+                        <span style="font-size: 14px;">${mensaje}</span>
                     </div>
                     <div style="display: flex; gap: 10px; align-items: center;">
                         <a href="mailto:laplayitaestacionamiento@gmail.com" style="
                             background: rgba(255,255,255,0.2);
                             color: white;
-                            padding: 8px 20px;
+                            padding: 6px 16px;
                             border-radius: 20px;
                             text-decoration: none;
-                            font-size: 14px;
+                            font-size: 13px;
                             font-weight: 600;
                             backdrop-filter: blur(10px);
                             transition: all 0.3s;
                         " onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
                             📧 Contactar
                         </a>
-                        <button onclick="document.getElementById('banner-suscripcion').style.display='none'" style="
+                        <button onclick="document.getElementById('banner-suscripcion').style.display='none'; document.querySelector('.main-content').style.paddingTop='20px';" style="
                             background: transparent;
                             border: none;
                             color: white;
@@ -128,8 +128,11 @@
         // Insertar al inicio del body
         document.body.insertAdjacentHTML('afterbegin', bannerHTML);
 
-        // Ajustar padding del body para que no tape contenido
-        document.body.style.paddingTop = '60px';
+        // Ajustar padding del contenido principal para que no tape
+        const mainContent = document.querySelector('.main-content');
+        if (mainContent) {
+            mainContent.style.paddingTop = '60px';
+        }
     }
 
     // Ejecutar al cargar la página

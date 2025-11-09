@@ -10,6 +10,8 @@ const pool = new Pool({
     max: 10,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
+    // Forzar IPv4 para evitar problemas con IPv6
+    host: process.env.DATABASE_HOST || undefined,
     // Configurar zona horaria para Buenos Aires
     options: '-c timezone=America/Argentina/Buenos_Aires'
 });
