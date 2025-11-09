@@ -42,7 +42,7 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="/login" className="hover:text-white transition-colors">
+                <a href="https://laplayita-production.up.railway.app/index.html" className="hover:text-white transition-colors">
                   Acceder al Sistema
                 </a>
               </li>
