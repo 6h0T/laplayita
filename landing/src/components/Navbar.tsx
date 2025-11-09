@@ -40,7 +40,7 @@ export default function Navbar() {
               Planes
             </a>
             <a 
-              href="http://localhost:3000" 
+              href="/index.html" 
               className="bg-gradient-to-r from-primary-500 to-primary-600 text-white px-6 py-2 rounded-full hover:shadow-lg transition-all"
             >
               Acceder al Sistema
@@ -92,7 +92,7 @@ export default function Navbar() {
               Planes
             </a>
             <a
-              href="http://localhost:3000"
+              href="/index.html"
               className="block px-3 py-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-md text-center"
             >
               Acceder al Sistema

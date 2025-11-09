@@ -42,7 +42,7 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="http://localhost:3000" className="hover:text-white transition-colors">
+                <a href="/index.html" className="hover:text-white transition-colors">
                   Acceder al Sistema
                 </a>
               </li>

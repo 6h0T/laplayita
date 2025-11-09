@@ -122,7 +122,7 @@ export default function Hero() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <a href="http://localhost:3000/registro.html" className="btn-primary inline-flex items-center justify-center gap-2 text-sm sm:text-base px-6 py-3">
+              <a href="/registro.html" className="btn-primary inline-flex items-center justify-center gap-2 text-sm sm:text-base px-6 py-3">
                 Prueba el Sistema por 7 Días
                 <ArrowRight size={18} className="sm:w-5 sm:h-5" />
               </a>
