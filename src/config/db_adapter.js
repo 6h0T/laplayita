@@ -1,16 +1,12 @@
 const { Pool } = require('pg');
 require('dotenv').config();
 
-// Configuración de la conexión a Supabase (PostgreSQL)
+// Configuración de la conexión a PostgreSQL (Railway o Supabase)
 const pool = new Pool({
-    host: process.env.SUPABASE_DB_HOST,
-    port: process.env.SUPABASE_DB_PORT || 5432,
-    database: process.env.SUPABASE_DB_NAME,
-    user: process.env.SUPABASE_DB_USER,
-    password: process.env.SUPABASE_DB_PASSWORD,
-    ssl: {
+    connectionString: process.env.DATABASE_URL || process.env.SUPABASE_CONNECTION_STRING,
+    ssl: process.env.NODE_ENV === 'production' ? {
         rejectUnauthorized: false
-    },
+    } : false,
     max: 10,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
