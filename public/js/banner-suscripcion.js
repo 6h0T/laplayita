@@ -66,15 +66,6 @@
         };
 
         const config = colores[tipo];
-        
-        let mensaje = '';
-        if (diasRestantes > 1) {
-            mensaje = `Te quedan <strong>${diasRestantes} días</strong> de prueba gratis`;
-        } else if (diasRestantes === 1) {
-            mensaje = `Te queda <strong>1 día</strong> de prueba gratis`;
-        } else if (horasRestantes > 0) {
-            mensaje = `Te quedan <strong>${horasRestantes} horas</strong> de prueba gratis`;
-        }
 
         const bannerHTML = `
             <div id="banner-suscripcion" style="
@@ -91,9 +82,23 @@
                 font-family: 'Poppins', sans-serif;
             ">
                 <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-                    <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="display: flex; align-items: center; gap: 15px;">
                         <span style="font-size: 20px;">${config.icon}</span>
-                        <span style="font-size: 14px;">${mensaje}</span>
+                        <span style="font-size: 14px;">Tiempo restante de prueba:</span>
+                        <div id="countdown-timer" style="
+                            font-family: 'Courier New', monospace;
+                            font-size: 16px;
+                            font-weight: bold;
+                            background: rgba(255,255,255,0.2);
+                            padding: 6px 16px;
+                            border-radius: 12px;
+                            backdrop-filter: blur(10px);
+                        ">
+                            <span id="days">0</span>d 
+                            <span id="hours">00</span>h 
+                            <span id="minutes">00</span>m 
+                            <span id="seconds">00</span>s
+                        </div>
                     </div>
                     <div style="display: flex; gap: 10px; align-items: center;">
                         <a href="mailto:laplayitaestacionamiento@gmail.com" style="
@@ -109,7 +114,7 @@
                         " onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
                             📧 Contactar
                         </a>
-                        <button onclick="document.getElementById('banner-suscripcion').style.display='none'; document.querySelector('.main-content').style.paddingTop='20px';" style="
+                        <button onclick="document.getElementById('banner-suscripcion').style.display='none'; document.querySelector('.main-content').style.paddingTop='20px'; clearInterval(window.countdownInterval);" style="
                             background: transparent;
                             border: none;
                             color: white;
@@ -133,6 +138,74 @@
         if (mainContent) {
             mainContent.style.paddingTop = '60px';
         }
+
+        // Iniciar contador en tiempo real
+        iniciarContador();
+    }
+
+    // Función para actualizar el contador cada segundo
+    function iniciarContador() {
+        async function obtenerFechaExpiracion() {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) return null;
+
+                const response = await fetch('/api/suscripcion/estado', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) return null;
+
+                const data = await response.json();
+                return data.data?.fechaExpiracion;
+            } catch (error) {
+                console.error('Error obteniendo fecha de expiración:', error);
+                return null;
+            }
+        }
+
+        obtenerFechaExpiracion().then(fechaExpiracion => {
+            if (!fechaExpiracion) return;
+
+            const expiracion = new Date(fechaExpiracion);
+
+            function actualizarContador() {
+                const ahora = new Date();
+                const diferencia = expiracion - ahora;
+
+                if (diferencia <= 0) {
+                    // Expiró, recargar página para que el middleware bloquee
+                    clearInterval(window.countdownInterval);
+                    window.location.reload();
+                    return;
+                }
+
+                // Calcular días, horas, minutos y segundos
+                const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+                const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+                const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+
+                // Actualizar elementos del DOM
+                const daysEl = document.getElementById('days');
+                const hoursEl = document.getElementById('hours');
+                const minutesEl = document.getElementById('minutes');
+                const secondsEl = document.getElementById('seconds');
+
+                if (daysEl) daysEl.textContent = dias;
+                if (hoursEl) hoursEl.textContent = String(horas).padStart(2, '0');
+                if (minutesEl) minutesEl.textContent = String(minutos).padStart(2, '0');
+                if (secondsEl) secondsEl.textContent = String(segundos).padStart(2, '0');
+            }
+
+            // Actualizar inmediatamente
+            actualizarContador();
+
+            // Actualizar cada segundo
+            window.countdownInterval = setInterval(actualizarContador, 1000);
+        });
     }
 
     // Ejecutar al cargar la página
